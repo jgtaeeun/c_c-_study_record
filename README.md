@@ -410,7 +410,7 @@ printf("코드 영역:%p\n", (void*)function);
 
 
 
-### 7/28일 해야할 것
+### 공부 해야할 것
 - 문자열 상수 
 - 동적할당
 
@@ -419,3 +419,122 @@ printf("코드 영역:%p\n", (void*)function);
 1. 다형성
 - 정적 다형성 - 오버로딩.함수템플릿
 - 동적 다형성 - 오버라이딩. virtual
+
+2. 벡터정렬
+- 기본 정렬 (오름차순)
+- 정렬값 반환받을 변수 필요없다.
+```C
+#include <iostream>
+#include <vector>
+#include <algorithm> // sort 함수 포함
+
+using namespace std;
+
+int main() {
+    vector<int> v = {5, 3, 8, 1, 2};
+
+    sort(v.begin(), v.end()); // 오름차순 정렬
+
+    for (int i : v) {
+        cout << i << " ";
+    }
+
+    return 0;
+}
+//출력: 1 2 3 5 8
+```
+
+3. 문자열 std::string
+- C++에서 문자열을 표현할 때는 보통 std::string 을 사용합니다.
+- C 스타일의 char[]보다 훨씬 편리하고 기능이 많습니다.
+
+```C
+#include <iostream>
+#include <string>  // string 사용하려면 필요
+using namespace std;
+
+int main() {
+    string s = "Hello, world!";
+    cout << s << endl;
+    return 0;
+}
+```
+
+- 자주 쓰는 string 함수들
+
+|기능|예시 코드|설명|
+|:--:|:--:|:--:|
+|길이 구하기|s.length() 또는 s.size()|문자열 길이|
+|문자 접근|s[0], s.at(1)|인덱스로 문자 접근|
+|붙이기|s += "abc";, s.append("xyz");|문자열 추가|
+|부분 문자열|s.substr(0, 5)|부분 문자열 추출|
+|찾기|s.find("hello")|문자열 찾기 (없으면 string::npos 반환)|
+|비교|s1 == s2, s1 < s2|비교 가능 (사전순)|
+|삭제|s.erase(3, 2)|3번째부터 2글자 삭제|
+|삽입|s.insert(2, "ab")|2번째 위치에 삽입|
+
+4. stringstream
+- C++에서 문자열을 공백이나 구분자 기준으로 나누거나, 문자열 ↔ 숫자 간 변환에 매우 자주 쓰입니다. 
+
+```C
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    string input = "D 2 C U 3 C D 4 C U 2 Z Z";
+    stringstream ss(input);
+    string token;
+    vector<string> result;
+
+    while (ss >> token) {  // 공백 기준 자동 분리
+        result.push_back(token);
+    }
+
+    for (string s : result)
+        cout << s << endl;
+
+    return 0;
+}
+//출력
+// D
+// 2
+// C
+// U
+// 3
+//...
+```
+
+``` C
+string s = "123";
+int num;
+stringstream(s) >> num;
+cout << num + 10;  // 출력: 133
+```
+
+5. 문자연산은 아스키 연산 결과
+```C
+char a = 'A'; // ASCII 값 65
+char b = 'C'; // ASCII 값 67
+int result = b - a; // 67 - 65 = 2
+```
+
+6. vector의 인덱스는 음수를 인식 못함
+- vector (혹은 배열, 리스트)의 인덱스는 0 이상 정수입니다.
+- 음수 인덱스를 사용하면 에러가 발생하거나, 정의되지 않은 동작(Undefined Behavior)을 일으킵니다.
+```C
+for (int i = 0; i < v.size(); ++i) {
+    std::cout << v[i] << " ";
+}
+```
+
+- 뒤에서부터 접근하고 싶다면: v.size()가 0이면 v.size() - 1이 -1**이 되어, unsigned int 타입으로 암묵 변환되면 아주 큰 값이 되어버릴 수 있습니다. 그러므로 빈 vector 체크가 필요할 수 있습니다:
+```C
+if (!v.empty()) {
+    for (int i = v.size() - 1; i >= 0; --i) {
+        // ...
+    }
+}
+```
